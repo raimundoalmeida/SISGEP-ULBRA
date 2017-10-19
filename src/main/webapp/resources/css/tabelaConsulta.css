@@ -1,0 +1,48 @@
+td.tomador {
+	width: 170px;
+	border: 2px;
+	
+}
+td.prestador{
+	width: 170px;
+}
+
+td.mesReferncia { 
+	width: 100px;
+	text-align: center;
+}
+
+td.emissao { 
+	width: 90px;
+	text-align: center;
+}
+
+td.vencimento { 
+	width: 90px;	
+	text-align: center;
+}
+
+td.liquido{ 
+	width: 80px;
+	text-align: center;
+}
+td.iss { 
+	width: 80px;
+	text-align: center;
+}
+td.irrf { 
+	width: 80px;
+	text-align: center;
+}
+td.valorbruto { 
+	width: 80px;
+	text-align: center;
+}
+td.descricao { 
+	width: 100px;
+	text-align: center;
+}
+td.observacao { 
+	width: 150px;
+	text-align: center;
+}

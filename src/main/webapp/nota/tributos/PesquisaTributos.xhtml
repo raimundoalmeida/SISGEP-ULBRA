@@ -1,0 +1,116 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Pesquisa Notas</ui:define>
+
+	<ui:define name="corpo">
+		<h:form id="frmPesquisa">
+		
+			<h1>Pesquisa notas</h1>
+			<p:messages autoUpdate="true" closable="true" />
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisar" action="#{pesquisaTributosBean.pesquisar}" update="@form"/>
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Novo" outcome="/nota/tributos/NovoTributo" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="painel" style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+				<p:outputLabel value="Data de criação" />
+	    		<h:panelGroup>
+	    			<p:calendar size="10" pattern="dd/MM/yyyy" locale="pt" value="#{pesquisaTributosBean.filtro.dataCriacaoDe}" />
+	    			a
+	    			<p:calendar size="10" pattern="dd/MM/yyyy" locale="pt" value="#{pesquisaTributosBean.filtro.dataCriacaoAte}" />
+	    		</h:panelGroup>
+	    		
+				<p:outputLabel value="Prestador" for="prestador" />
+				<p:inputText id="prestador" size="60" value="#{pesquisaTributosBean.filtro.nomePrestador}"/>
+				
+			</p:panelGrid>
+
+			<p:dataTable id="lancamentoTable" value="#{pesquisaTributosBean.lancamentosFiltrados}" var="lancamento"
+				style="margin-top: 20px" emptyMessage="Nenhum lançamento encontrado."
+				rows="20" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+				
+				<p:column headerText="Codigo" sortBy="#{lancamento.id}" style="width: 40px">
+					<h:outputText value="#{lancamento.id}" />
+				</p:column>
+				<p:column headerText="Tomador" sortBy="#{lancamento.tomador.nome}">
+					<h:outputText value="#{lancamento.tomador.nome}" />
+				</p:column>
+				<p:column headerText="Prestador" sortBy="#{lancamento.prestador.nome}">
+					<h:outputText value="#{lancamento.prestador.nome}" />
+				</p:column>
+				
+				<p:column headerText="Refernete" sortBy="#{lancamento.mesReferencia}" style="text-align: center; width: 80px" >
+					<h:outputText value="#{lancamento.mesReferencia}" >
+						<f:convertDateTime pattern="MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Emissão" style="text-align: center; width: 80px" >
+					<h:outputText value="#{lancamento.dataEmissao}" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Vencimento" style="text-align: center; width: 80px" >
+					<h:outputText value="#{lancamento.dataVencimento}" >
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Bruto" style="width: 80px">
+					<h:outputText value="#{lancamento.bruto}" style="float: right;">
+						<f:convertNumber type="currency"/>
+					</h:outputText>
+				</p:column>
+				<p:column headerText="ISS" style="width: 80px">
+					<h:outputText value="#{lancamento.iss}" style="float: right">
+						<f:convertNumber type="currency"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="IRRF" style="width: 80px">
+					<h:outputText value="#{lancamento.irrf}" style="float: right">
+						<f:convertNumber type="currency"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Liquido" style="width: 80px">
+					<h:outputText value="#{lancamento.liquido}" style="float: right">
+						<f:convertNumber type="currency"/>
+					</h:outputText>
+				</p:column>
+		
+				<p:column style="width:100px; text-align: center">
+					<p:button icon="ui-icon-pencil" title="Editar" outcome="/nota/tributos/NovoTributo" >
+						<f:param name="lancamento" value="#{lancamento.id}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmacaoExclusao').show();"
+						process="@this" update=":frmPesquisa:cofirmacaoExclusaoDialog">
+						<f:setPropertyActionListener value="#{lancamento}" target="#{pesquisaTributosBean.lancamentoSelecionnado}"/>
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:confirmDialog header="Exclusão de Lançamento"	message="Tem certeza que deseja escluir o lançamento número 
+				#{pesquisaTributosBean.lancamentoSelecionnado.id}?"
+				widgetVar="confirmacaoExclusao" id="cofirmacaoExclusaoDialog">
+				
+				<p:button value="Não" onclick="PF('confirmacaoExclusao').hide(); return false"/>
+				
+				<p:commandButton value="Sim" oncomplete="PF('confirmacaoExclusao').hide();"
+					action="#{pesquisaTributosBean.excluir}" process="@this" update=":frmPesquisa:lancamentoTable" />
+			</p:confirmDialog>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

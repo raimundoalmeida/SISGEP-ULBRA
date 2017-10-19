@@ -1,0 +1,104 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">#{cadastroPrestadorBean.editando ? 'Edição de prestador' : 'Novo prestador'}</ui:define>
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<o:viewParam name="prestador"
+				value="#{cadastroPrestadorBean.prestador}" />
+		</f:metadata>
+
+		<h:form id="frm">
+			<h1>#{cadastroPrestadorBean.editando ? 'Edição de prestador' :
+				'Novo prestador'}</h1>
+			<p:messages autoUpdate="true" closable="true" />
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:button value="Novo"
+						outcome="/nota/prestadores/CadastroPrestador" />
+					<p:commandButton value="Salvar" id="botaoSalvar" update="@form"
+						action="#{cadastroPrestadorBean.salvar}" />
+				</p:toolbarGroup>
+
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa"
+						outcome="/nota/prestadores/PesquisaPrestadores" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="painel"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+				<p:outputLabel value="Nome" for="Nome" />
+				<p:inputText id="Nome" size="60" maxlength="80"
+					value="#{cadastroPrestadorBean.prestador.nome}" />
+
+				<p:outputLabel value="Tipo" for="tipo" />
+				<p:selectOneRadio id="tipo"
+					value="#{cadastroPrestadorBean.prestador.tipo}">
+					<f:selectItems value="#{cadastroPrestadorBean.tipos}" var="tipo"
+						itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+					<p:ajax event="change" process="@this"
+						update="doncumentoReceitaFederal doncumentoReceitaFederalLabel" />
+				</p:selectOneRadio>
+				<p:outputLabel
+					value="#{cadastroPrestadorBean.prestador.tipo.rotulo}"
+					id="doncumentoReceitaFederalLabel" for="doncumentoReceitaFederal" />
+
+				<p:inputMask id="doncumentoReceitaFederal"
+					mask="#{cadastroPrestadorBean.prestador.tipo.mascara}"
+					converter="cpfCnpjMask"
+					value="#{cadastroPrestadorBean.prestador.documentoReceitaFederal}" >
+					<f:validateBean validationGroups="#{cadastroPrestadorBean.prestador.tipo.grupoValidacao}"/>
+				</p:inputMask>
+
+				<p:outputLabel value="Cidade" for="cidade" />
+				<h:panelGroup>
+					<p:inputText id="cidade" size="60" maxlength="60"
+						style="margin-right: 33px;"
+						value="#{cadastroPrestadorBean.prestador.cidade}" />
+					<p:outputLabel value="UF" for="uf" />
+					<p:inputText id="uf" size="10" maxlength="4"
+						style="margin-left: 8px"
+						value="#{cadastroPrestadorBean.prestador.uf}" />
+				</h:panelGroup>
+
+				<p:outputLabel value="Logradouro" for="logradouro" />
+				<h:panelGroup>
+					<p:inputText id="logradouro" size="60" maxlength="80"
+						style="margin-right: 8px;"
+						value="#{cadastroPrestadorBean.prestador.logradouro}" />
+					<p:outputLabel value="Numero" for="numero" />
+					<p:inputText id="numero" size="10" maxlength="4"
+						style="margin-left: 8px"
+						value="#{cadastroPrestadorBean.prestador.numero}" />
+				</h:panelGroup>
+
+				<p:outputLabel value="Bairro" for="bairro" />
+				<p:inputText id="bairro" size="60" maxlength="80"
+					value="#{cadastroPrestadorBean.prestador.bairro}" />
+					
+				<p:outputLabel value="Complemento" for="complemento" />
+				<p:inputText id="complemento" size="60" maxlength="80"
+					value="#{cadastroPrestadorBean.prestador.complemento}" />
+					
+				<p:outputLabel value="CEP" for="cep" />
+				<p:inputMask id="cep" mask="99.999-999"
+					value="#{cadastroPrestadorBean.prestador.cep}" />
+
+				<p:outputLabel value="Telefone" for="telefone" />
+				<p:inputMask id="telefone" mask="(99) 99999-9999"
+					value="#{cadastroPrestadorBean.prestador.telefone}" />
+
+				<p:outputLabel value="E-mail" for="email" />
+				<p:inputText id="email" size="60" maxlength="80"
+					value="#{cadastroPrestadorBean.prestador.email}" />
+			</p:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
